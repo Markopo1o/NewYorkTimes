@@ -28,6 +28,7 @@ android {
         buildConfigField 'String', 'TIMES_API_KEY', "\"" + localProps['times.apikey'] + "\""
         buildConfigField 'String', 'BASE_URL', "\"https://api.nytimes.com\""
         buildConfigField 'String', 'CHROME_PACKAGE', "\"com.android.chrome\""
+        buildConfigField 'String', 'DEFPIC_URL', "\"https://developer.nytimes.com/logos/logo?v=1600101622804\""
     }
 
     buildTypes {

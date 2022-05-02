@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="hu.jm.newyorktimes.ui.list.ListFragment"
-        android:label="fragment_list"
+        android:label="Most Viewed"
         tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/action_listFragment_to_detailsFragment"
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="hu.jm.newyorktimes.ui.details.DetailsFragment"
-        android:label="fragment_details"
+        android:label="Details"
         tools:layout="@layout/fragment_details" >
         <action
             android:id="@+id/action_detailsFragment_to_listFragment"
