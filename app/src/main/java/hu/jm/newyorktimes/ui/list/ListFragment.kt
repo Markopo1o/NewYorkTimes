@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
+import dagger.hilt.android.AndroidEntryPoint
 import hu.jm.newyorktimes.BuildConfig
 import hu.jm.newyorktimes.R
 import hu.jm.newyorktimes.databinding.FragmentListBinding
@@ -22,6 +23,7 @@ import hu.jm.newyorktimes.model.News
 import hu.jm.newyorktimes.ui.list.adapter.NewsListAdapter
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ListFragment : Fragment(), SearchView.OnQueryTextListener{
     private val viewModel: ListViewModel by viewModels()
     private val adapter = NewsListAdapter()

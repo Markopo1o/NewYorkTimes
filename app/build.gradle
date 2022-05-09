@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
     id 'kotlin-android'
+    id 'dagger.hilt.android.plugin'
     id("androidx.navigation.safeargs")
 }
 Properties localProps = new Properties()

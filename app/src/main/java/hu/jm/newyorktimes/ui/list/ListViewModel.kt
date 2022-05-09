@@ -2,6 +2,7 @@ package hu.jm.newyorktimes.ui.list
 
 import android.app.Application
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.jm.newyorktimes.datasource.disk.NewsDatabase
 import hu.jm.newyorktimes.model.NYTimesResult
 import hu.jm.newyorktimes.model.News
@@ -11,11 +12,19 @@ import hu.jm.newyorktimes.util.NetworkErrorResult
 import hu.jm.newyorktimes.util.NetworkResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel(application: Application) : AndroidViewModel(application){
-    private var networkRepository: NetworkRepository = NetworkRepository()
+@HiltViewModel
+class ListViewModel @Inject constructor(
+    private val networkRepository: NetworkRepository,
+    private val diskRepository: DiskRepository,
+    application: Application
+) : AndroidViewModel(application){
+
     private val result = MutableLiveData<ListViewState>()
+
     fun getLiveData() = result
+
     fun getNewsInViewModel(){
         result.value = InProgress
         viewModelScope.launch(Dispatchers.IO){
@@ -31,19 +40,22 @@ class ListViewModel(application: Application) : AndroidViewModel(application){
             }
         }
     }
-    private val newsDao = NewsDatabase.getDatabase(application).newsDao()
-    private val diskRepository: DiskRepository = DiskRepository(newsDao)
+
+
     val readAllDataInViewModel: LiveData<List<News>> = diskRepository.readAllDataInRepository
+
     fun deleteAllUsers(){
         viewModelScope.launch(Dispatchers.IO) {
             diskRepository.deleteAllNewsInRepository()
         }
     }
+
     fun addNewsInViewModel(news: News){
         viewModelScope.launch(Dispatchers.IO) {
             diskRepository.addUserInRepository(news)
         }
     }
+
     fun searchDatabase(searchQuery: String): LiveData<List<News>> {
         return diskRepository.searchDatabase(searchQuery).asLiveData()
     }
