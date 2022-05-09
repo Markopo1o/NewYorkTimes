@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ListFragment : Fragment(), SearchView.OnQueryTextListener{
     private val viewModel: ListViewModel by viewModels()
-    private val adapter = NewsListAdapter()
+    private val adapter : NewsListAdapter by lazy { NewsListAdapter() }
     private var _binding: FragmentListBinding? = null
     private val binding
         get() = _binding!!
@@ -99,9 +99,9 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
             }
         }
     }
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater){
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
-        //inflater.inflate(R.menu.more_menu, menu)
         val search = menu.findItem(R.id.menu_search)
         val searchView = search?.actionView as? SearchView
         searchView?.setOnQueryTextListener(this)
@@ -123,6 +123,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
             }
         }
     }
+    
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

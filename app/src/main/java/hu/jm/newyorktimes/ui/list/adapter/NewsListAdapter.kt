@@ -11,7 +11,9 @@ import hu.jm.newyorktimes.model.News
 import hu.jm.newyorktimes.ui.list.ListFragmentDirections
 
 class NewsListAdapter: RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
-    private var newsList = emptyList<News>()
+
+    private var oldData = emptyList<News>()
+
     inner class ViewHolder(binding: NewsRowBinding) : RecyclerView.ViewHolder(binding.root){
         var pic = binding.ivPic
         var title = binding.tvTitle
@@ -19,18 +21,20 @@ class NewsListAdapter: RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
         var updated = binding.tvDate
         var arrow = binding.ivArrow
         var rowLayout = binding.rowLayout
+
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = NewsRowBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
+
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = newsList[position]
+        val currentItem = oldData[position]
         holder.title.text = currentItem.title
         holder.author.text = currentItem.author
         holder.updated.text = currentItem.updated
-        holder.pic.load(newsList[position].pic)
+        holder.pic.load(oldData[position].pic)
 
         holder.rowLayout.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToDetailsFragment(currentItem)
@@ -38,11 +42,11 @@ class NewsListAdapter: RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
         }
     }
     override fun getItemCount(): Int {
-        return newsList.size
+        return oldData.size
     }
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(news: List<News>){
-        this.newsList = news
+    fun setData(newData: List<News>){
+        this.oldData = newData
         notifyDataSetChanged()
     }
 }
