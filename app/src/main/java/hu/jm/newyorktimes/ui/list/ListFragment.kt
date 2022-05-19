@@ -25,24 +25,31 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListFragment : Fragment(), SearchView.OnQueryTextListener{
+
     private val viewModel: ListViewModel by viewModels()
     private val adapter : NewsListAdapter by lazy { NewsListAdapter() }
     private var _binding: FragmentListBinding? = null
     private val binding
         get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View{
+
         _binding = FragmentListBinding.inflate(inflater,container,false)
         return binding.root
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         viewModel.getLiveData().observe(this
         ) { result -> render(result) }
     }
+
     override fun onResume() {
+
         super.onResume()
         setHasOptionsMenu(true)
         val recyclerView = _binding!!.recyclerview
@@ -51,11 +58,15 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         viewModel.readAllDataInViewModel.observe(viewLifecycleOwner) { news ->
             adapter.setData(news)
         }
+
         binding.swiperefresh.setOnRefreshListener {
+
             viewModel.getNewsInViewModel()
         }
     }
+
     private suspend fun getBitmap(url: String): Bitmap {
+
         val loading = ImageLoader(requireContext())
         val request = ImageRequest.Builder(requireContext())
             .data(url)
@@ -63,7 +74,9 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
         val result = (loading.execute(request) as SuccessResult).drawable
         return (result as BitmapDrawable).bitmap
     }
+
     private fun render(result: ListViewState) {
+
         when (result) {
             is InProgress -> {
                 binding.swiperefresh.isEnabled = false
@@ -72,12 +85,15 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
                 var i = 0
                 lifecycleScope.launch {
                     viewModel.deleteAllUsers()
+
                     while (i < result.data.results.size){
+
                          val pic = if(result.data.results[i].media.isEmpty()){
                             getBitmap(BuildConfig.DEFPIC_URL)
                         }else{
                             getBitmap(result.data.results[i].media[0].mediaMetadata!![0]!!.url)
                         }
+
                         val news = News(
                             pic = pic,
                             title = result.data.results[i].title,
@@ -85,14 +101,18 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
                             updated = result.data.results[i].updated,
                             url = result.data.results[i].url
                         )
+
                         viewModel.addNewsInViewModel(news)
+
                         i++
                     }
                 }
+
                 binding.swiperefresh.isRefreshing = false
                 binding.swiperefresh.isEnabled = true
             }
             is ResponseError -> {
+
                 Toast.makeText(requireContext(), result.exceptionMsg, Toast.LENGTH_SHORT).show()
                 binding.swiperefresh.isRefreshing = false
                 binding.swiperefresh.isEnabled = true
@@ -101,21 +121,28 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
         inflater.inflate(R.menu.search_menu, menu)
         val search = menu.findItem(R.id.menu_search)
         val searchView = search?.actionView as? SearchView
         searchView?.setOnQueryTextListener(this)
     }
+
     override fun onQueryTextSubmit(query: String?): Boolean {
+
         return true
     }
+
     override fun onQueryTextChange(query: String?): Boolean {
+
         if(query != null){
             searchDatabase(query)
         }
         return true
     }
+
     private fun searchDatabase(query: String) {
+
         val searchQuery = "%$query%"
         viewModel.searchDatabase(searchQuery).observe(this) { list ->
             list.let {
@@ -125,6 +152,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener{
     }
     
     override fun onDestroy() {
+
         super.onDestroy()
         _binding = null
     }

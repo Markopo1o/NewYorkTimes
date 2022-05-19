@@ -16,6 +16,7 @@ object NetworkRepositoryModule {
     @Provides
     @Singleton
     fun provideTimesNetworkDataSource(timesAPI: TimesAPI): TimesNetworkDataSource {
+
         return TimesNetworkDataSource(timesAPI)
     }
 
@@ -24,6 +25,7 @@ object NetworkRepositoryModule {
     fun provideNetworkRepository(
         timesNetworkDataSource: TimesNetworkDataSource
     ): NetworkRepository {
+
         return NetworkRepository(timesNetworkDataSource)
     }
 }

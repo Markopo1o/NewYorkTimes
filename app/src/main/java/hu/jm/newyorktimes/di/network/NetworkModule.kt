@@ -19,6 +19,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
+
         val levelType: HttpLoggingInterceptor.Level = if (BuildConfig.BUILD_TYPE.contentEquals("debug"))
             HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 
@@ -33,6 +34,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
@@ -43,6 +45,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTimesApi(retrofit: Retrofit): TimesAPI {
+
         return retrofit.create(TimesAPI::class.java)
     }
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addNewsInNewsDao(news: News)
 

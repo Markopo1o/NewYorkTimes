@@ -26,9 +26,12 @@ class ListViewModel @Inject constructor(
     fun getLiveData() = result
 
     fun getNewsInViewModel(){
+
         result.value = InProgress
         viewModelScope.launch(Dispatchers.IO){
+
             val response = networkRepository.getNewsInRepositoty()
+
             when(response){
                 is NetworkResult -> {
                     val newsResult = response.result as NYTimesResult
@@ -41,22 +44,24 @@ class ListViewModel @Inject constructor(
         }
     }
 
-
     val readAllDataInViewModel: LiveData<List<News>> = diskRepository.readAllDataInRepository
 
     fun deleteAllUsers(){
+
         viewModelScope.launch(Dispatchers.IO) {
             diskRepository.deleteAllNewsInRepository()
         }
     }
 
     fun addNewsInViewModel(news: News){
+
         viewModelScope.launch(Dispatchers.IO) {
             diskRepository.addUserInRepository(news)
         }
     }
 
     fun searchDatabase(searchQuery: String): LiveData<List<News>> {
+
         return diskRepository.searchDatabase(searchQuery).asLiveData()
     }
 }

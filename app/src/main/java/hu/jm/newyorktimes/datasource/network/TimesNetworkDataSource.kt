@@ -9,14 +9,19 @@ import java.lang.Exception
 
 class TimesNetworkDataSource(private val timesAPI: TimesAPI) {
     suspend fun getNewsInDataSource(): NetworkResponse<Any> {
+
         try {
+
             val response = timesAPI.getRates(BuildConfig.TIMES_API_KEY)
 
             response?.let {
+
                 return NetworkResult(it.body()!!)
             }
+
             return NetworkErrorResult(Exception("No data"))
         } catch (e: Exception) {
+
             return NetworkErrorResult(e)
         }
     }
